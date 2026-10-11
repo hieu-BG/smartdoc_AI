@@ -1,12 +1,15 @@
 import streamlit as st
+import time  # 1. Thêm thư viện đo thời gian
 from ui.theme import load_main_style
 from rag.rag import ask_pdf
 from rag.graph_rag.graphrag import ask_pdf as ask_pdf_graph
-from db.db import save_message,get_qa_history,get_message_count,update_conversation_title
+from db.db import save_message, get_qa_history, get_message_count, update_conversation_title
 from db.session import init_session
 from ui.ai_service import run_ai_pipeline
 import json
+
 MAX_FILE_SIZE = 10 * 1024 * 1024
+
 def render_main():
     init_session()
     load_main_style()
@@ -23,7 +26,7 @@ def render_main():
 
     uploaded_file = st.file_uploader(
         "",
-        type=["pdf","docx"]
+        type=["pdf", "docx"]
     )
     if uploaded_file is not None:
         if uploaded_file.type != "application/pdf" and uploaded_file.type != "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
@@ -31,19 +34,19 @@ def render_main():
         if uploaded_file.size > MAX_FILE_SIZE:
             st.error("File quá lớn! Vui lòng tải file nhỏ hơn 10MB.")
         else:
-            st.success(" File hợp lệ!")
+            st.success("File hợp lệ!")
         
-    #  ===== QUESTION =====
+    # ===== QUESTION =====
     st.markdown(
-        '<div class="section-title"> Đặt câu hỏi</div>',
+        '<div class="section-title">Đặt câu hỏi</div>',
         unsafe_allow_html=True
     )
     st.markdown("Chọn chế độ trả lời")
 
     mode = st.radio(
-    "",
-    ["RAG", "GraphRAG", "CoRAG", "SelfRAG"],
-    horizontal=True
+        "",
+        ["RAG", "GraphRAG", "CoRAG", "SelfRAG"],
+        horizontal=True
     )   
     
     with st.form(key="question_form"):
@@ -60,7 +63,6 @@ def render_main():
     
     # ===== PROCESS =====
     if submitted:
-
         if uploaded_file is None:
             st.warning("Vui lòng tải tài liệu lên trước")
 
@@ -68,12 +70,12 @@ def render_main():
             st.warning("Vui lòng nhập câu hỏi")
 
         else:
-
             # lưu file tạm
             file_path = f"temp_{uploaded_file.name}"
 
             with open(file_path, "wb") as f:
                 f.write(uploaded_file.read())
+
             # tạo progress UI
             progress_bar = st.progress(0)
             status = st.empty()
@@ -81,8 +83,12 @@ def render_main():
             def update_progress(percent, text):
                 progress_bar.progress(percent)
                 status.text(text)
+
             with st.spinner("AI đang phân tích tài liệu..."):
                 try:
+                    # 2. BẤM GIỜ BẮT ĐẦU CHẠY PIPELINE
+                    start_time = time.time()
+
                     response = run_ai_pipeline(
                         file_path=file_path,
                         question=question,
@@ -90,6 +96,20 @@ def render_main():
                         progress=update_progress
                     )
                     
+                    # 3. TÍNH THỜI GIAN VÀ TỐC ĐỘ TOKEN
+                    elapsed_time = round(time.time() - start_time, 2)
+                    words = len(str(response).split())
+                    approx_tokens = int(words * 1.3)
+                    speed = round(approx_tokens / elapsed_time, 1) if elapsed_time > 0 else 0
+
+                    # Lưu thông số vào session_state để không bị mất khi rerun
+                    st.session_state.last_metrics = {
+                        "time": elapsed_time,
+                        "speed": speed,
+                        "tokens": approx_tokens,
+                        "mode": mode
+                    }
+
                     progress_bar.progress(100)
                     status.empty()
                     save_message(st.session_state.conversation_id, "user", question)
@@ -107,7 +127,7 @@ def render_main():
                 except ValueError as e:
                     progress_bar.empty()
                     status.empty()
-                    st.warning(f" Lỗi: {str(e)}")
+                    st.warning(f"Lỗi: {str(e)}")
                 except Exception as e:
                     progress_bar.empty()
                     status.empty()
@@ -121,6 +141,16 @@ def render_main():
         answer = st.session_state.current_answer
         st.markdown(answer)
 
+        # 4. HIỂN THỊ THÔNG SỐ HIỆU NĂNG NGAY DƯỚI CÂU TRẢ LỜI
+        if st.session_state.get("last_metrics"):
+            m = st.session_state.last_metrics
+            st.caption(
+                f"⏱️ **Thời gian phản hồi:** {m['time']}s | "
+                f"⚡ **Tốc độ:** ~{m['speed']} tok/s | "
+                f"🧠 **Ước tính:** ~{m['tokens']} tokens | "
+                f"🎯 **Chế độ:** {m['mode']}"
+            )
+
     elif st.session_state.get("selected_answer"):
         answer = st.session_state.selected_answer
         st.markdown(answer)
@@ -128,13 +158,13 @@ def render_main():
     else:
         st.info("Chưa có câu trả lời")
     
+    # ===== LỊCH SỬ CÂU HỎI =====
     history = get_qa_history(st.session_state.conversation_id)
     if len(history) > 0:      
         st.markdown("### Lịch sử câu hỏi")
 
         for i, (q, a) in enumerate(history):
             if st.button(q, key=f"history_{i}"):
-
                 try:
                     parsed = json.loads(a)
                     st.session_state.selected_answer = parsed
@@ -142,4 +172,5 @@ def render_main():
                     st.session_state.selected_answer = a
 
                 st.session_state.current_answer = None
+                st.session_state.last_metrics = None  # Xóa metrics khi xem lại lịch sử
                 st.rerun()
