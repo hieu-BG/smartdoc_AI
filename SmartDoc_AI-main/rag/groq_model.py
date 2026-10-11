@@ -13,6 +13,6 @@ def get_groq_model():
         raise ValueError("GROQ_API_KEY is required for GraphRAG, CoRAG, and SelfRAG modes.")
     return ChatGroq(
         groq_api_key=api_key,
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         temperature=0,
     )

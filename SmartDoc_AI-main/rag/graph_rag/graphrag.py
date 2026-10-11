@@ -41,11 +41,25 @@ def ask_pdf(file_path, question, progress=None):
     graph_docs = extract_graph_documents(chunks, get_graph_transformer())
     node_mapping = map_nodes_to_source_texts(graph_docs)
     networkx_graph = build_networkx_graph(graph_docs)
-    node_vector_store = build_faiss_node_index(graph_docs, get_embeddings_model())
     # ── Phase 3: Search Graph ─────────────────────────────────────────────────────
     if progress:
         progress(80, "Đang tìm kiếm thông tin liên quan...")
-    context = search_graph(question, networkx_graph, node_mapping, node_vector_store, hop=1, max_context=20)
+    if networkx_graph.number_of_nodes():
+        node_vector_store = build_faiss_node_index(graph_docs, get_embeddings_model())
+        context = search_graph(
+            question,
+            networkx_graph,
+            node_mapping,
+            node_vector_store,
+            hop=1,
+            max_context=20,
+        )
+    else:
+        context = "\n\n".join(
+            f"[TEXT] {chunk['source']}: {chunk['text']}"
+            for chunk in chunks[:10]
+            if chunk.get("text")
+        )
     if progress:
         progress(90, "AI đang tạo câu trả lời...")
     # ── Phase 4: Generation ─────────────────────────────────────────────────────
