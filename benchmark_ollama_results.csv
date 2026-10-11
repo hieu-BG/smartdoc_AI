@@ -1,0 +1,41 @@
+Model,Question,Total_Latency_s,TTFT_s,Tokens_Per_Sec,Peak_RAM_GB,Peak_VRAM_GB,CPU_Percent,GPU_Percent
+"qwen2.5:7b-instruct-q4_K_M","RAG la gi va hoat dong nhu the nao trong he thong hoi dap tai lieu?",0.52,0.52,0.0,13.4,0.0,55.3,0.0
+"qwen2.5:7b-instruct-q4_K_M","Su khac biet giua mo hinh ngon ngu lon (LLM) va mo hinh Embedding la gi?",0.51,0.51,0.0,13.48,0.0,32.9,0.0
+"qwen2.5:7b-instruct-q4_K_M","Ollama dong vai tro gi trong viec trien khai suy luan AI cuc bo?",0.46,0.46,0.0,13.52,0.0,46.3,0.0
+"qwen2.5:7b-instruct-q4_K_M","Vector Database la gi va tai sao can dung trong kien truc RAG?",0.48,0.48,0.0,13.57,0.0,30.8,0.0
+"qwen2.5:7b-instruct-q4_K_M","Cosine Similarity duoc dung de lam gi khi tim kiem tai lieu tuong dong?",0.46,0.46,0.0,13.54,0.0,15.3,0.0
+"qwen2.5:7b-instruct-q4_K_M","Phan doan van ban (Text Chunking) co y nghia gi doi voi ngu canh cua LLM?",0.44,0.44,0.0,13.52,0.0,27.8,0.0
+"qwen2.5:7b-instruct-q4_K_M","Giai thich khai niem Time To First Token (TTFT) trong suy luan mo hinh AI.",0.47,0.47,0.0,13.51,0.0,13.5,0.0
+"qwen2.5:7b-instruct-q4_K_M","Luong tu hoa (Quantization) 4-bit khac 8-bit nhu the nao ve do chinh xac va dung luong?",0.45,0.45,0.0,13.51,0.0,13.9,0.0
+"qwen2.5:7b-instruct-q4_K_M","ChromaDB luu tru va danh chi muc vector dua tren co che nao?",0.4,0.4,0.0,13.52,0.0,25.0,0.0
+"qwen2.5:7b-instruct-q4_K_M","Hien tuong Hallucination (ao giac) cua LLM la gi va RAG giam thieu no ra sao?",0.47,0.47,0.0,13.43,0.0,20.2,0.0
+"qwen2.5:7b-instruct-q4_K_M","Prompt Engineering la gi va cau truc cua mot Prompt chuan gom nhung gi?",0.46,0.46,0.0,13.42,0.0,9.3,0.0
+"qwen2.5:7b-instruct-q4_K_M","Tai sao cac doanh nghiep lai uu tien chay On-premise LLM thay vi goi Cloud API?",0.45,0.45,0.0,13.41,0.0,19.7,0.0
+"qwen2.5:7b-instruct-q4_K_M","Virtual Environment (venv) trong Python co tac dung gi khi phat trien ung dung?",0.45,0.45,0.0,13.41,0.0,11.1,0.0
+"qwen2.5:7b-instruct-q4_K_M","Mo hinh nomic-embed-text co so chieu vector la bao nhieu va dung de lam gi?",0.44,0.44,0.0,13.4,0.0,10.3,0.0
+"qwen2.5:7b-instruct-q4_K_M","VRAM cua GPU dong vai tro gi khi nap mo hinh ngon ngu lon vao bo nho?",0.46,0.46,0.0,13.4,0.0,11.0,0.0
+"qwen2.5:7b-instruct-q4_K_M","Giai thich su khac biet giua Llama (mo hinh) va Ollama (runtime).",0.46,0.46,0.0,13.4,0.0,4.9,0.0
+"qwen2.5:7b-instruct-q4_K_M","Khai niem Context Window (cua so ngu canh) la gi trong LLM?",0.38,0.38,0.0,13.4,0.0,11.8,0.0
+"qwen2.5:7b-instruct-q4_K_M","The nao la Temperature trong cau hinh sinh van ban cua mo hinh ngon ngu?",0.44,0.44,0.0,13.41,0.0,20.8,0.0
+"qwen2.5:7b-instruct-q4_K_M","Top-k va Top-p sampling anh huong nhu the nao den tinh da dang cua cau tra loi?",0.38,0.38,0.0,13.41,0.0,7.6,0.0
+"qwen2.5:7b-instruct-q4_K_M","Trinh bay tom tat quy trinh xu ly file PDF tu khi tai len den khi dua vao Vector Store.",0.44,0.44,0.0,13.4,0.0,27.4,0.0
+"qwen2.5:7b-instruct-q8_0","RAG la gi va hoat dong nhu the nao trong he thong hoi dap tai lieu?",0.37,0.37,0.0,13.29,0.0,2.6,0.0
+"qwen2.5:7b-instruct-q8_0","Su khac biet giua mo hinh ngon ngu lon (LLM) va mo hinh Embedding la gi?",0.46,0.46,0.0,13.27,0.0,7.8,0.0
+"qwen2.5:7b-instruct-q8_0","Ollama dong vai tro gi trong viec trien khai suy luan AI cuc bo?",0.4,0.4,0.0,13.28,0.0,4.7,0.0
+"qwen2.5:7b-instruct-q8_0","Vector Database la gi va tai sao can dung trong kien truc RAG?",0.48,0.48,0.0,13.28,0.0,30.4,0.0
+"qwen2.5:7b-instruct-q8_0","Cosine Similarity duoc dung de lam gi khi tim kiem tai lieu tuong dong?",0.51,0.51,0.0,13.28,0.0,2.8,0.0
+"qwen2.5:7b-instruct-q8_0","Phan doan van ban (Text Chunking) co y nghia gi doi voi ngu canh cua LLM?",0.49,0.49,0.0,13.29,0.0,4.1,0.0
+"qwen2.5:7b-instruct-q8_0","Giai thich khai niem Time To First Token (TTFT) trong suy luan mo hinh AI.",0.5,0.5,0.0,13.28,0.0,31.2,0.0
+"qwen2.5:7b-instruct-q8_0","Luong tu hoa (Quantization) 4-bit khac 8-bit nhu the nao ve do chinh xac va dung luong?",0.52,0.52,0.0,13.2,0.0,1.2,0.0
+"qwen2.5:7b-instruct-q8_0","ChromaDB luu tru va danh chi muc vector dua tren co che nao?",0.41,0.41,0.0,13.2,0.0,7.1,0.0
+"qwen2.5:7b-instruct-q8_0","Hien tuong Hallucination (ao giac) cua LLM la gi va RAG giam thieu no ra sao?",0.38,0.38,0.0,13.2,0.0,2.9,0.0
+"qwen2.5:7b-instruct-q8_0","Prompt Engineering la gi va cau truc cua mot Prompt chuan gom nhung gi?",0.39,0.39,0.0,13.19,0.0,10.0,0.0
+"qwen2.5:7b-instruct-q8_0","Tai sao cac doanh nghiep lai uu tien chay On-premise LLM thay vi goi Cloud API?",0.51,0.51,0.0,13.19,0.0,6.8,0.0
+"qwen2.5:7b-instruct-q8_0","Virtual Environment (venv) trong Python co tac dung gi khi phat trien ung dung?",0.5,0.5,0.0,13.19,0.0,8.2,0.0
+"qwen2.5:7b-instruct-q8_0","Mo hinh nomic-embed-text co so chieu vector la bao nhieu va dung de lam gi?",0.5,0.5,0.0,13.19,0.0,5.1,0.0
+"qwen2.5:7b-instruct-q8_0","VRAM cua GPU dong vai tro gi khi nap mo hinh ngon ngu lon vao bo nho?",0.39,0.39,0.0,13.19,0.0,8.1,0.0
+"qwen2.5:7b-instruct-q8_0","Giai thich su khac biet giua Llama (mo hinh) va Ollama (runtime).",0.4,0.4,0.0,13.2,0.0,11.0,0.0
+"qwen2.5:7b-instruct-q8_0","Khai niem Context Window (cua so ngu canh) la gi trong LLM?",0.5,0.5,0.0,13.19,0.0,5.9,0.0
+"qwen2.5:7b-instruct-q8_0","The nao la Temperature trong cau hinh sinh van ban cua mo hinh ngon ngu?",0.51,0.51,0.0,13.19,0.0,15.3,0.0
+"qwen2.5:7b-instruct-q8_0","Top-k va Top-p sampling anh huong nhu the nao den tinh da dang cua cau tra loi?",0.5,0.5,0.0,13.2,0.0,16.0,0.0
+"qwen2.5:7b-instruct-q8_0","Trinh bay tom tat quy trinh xu ly file PDF tu khi tai len den khi dua vao Vector Store.",0.5,0.5,0.0,13.2,0.0,9.5,0.0
