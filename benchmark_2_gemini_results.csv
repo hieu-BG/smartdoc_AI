@@ -1,0 +1,21 @@
+Model,Question,Latency_s,TTFT_s,Tokens_Per_Sec,Model_RAM_GB,Peak_VRAM_GB,CPU_Percent,GPU_Percent
+"Ollama Local (4-bit)","RAG la gi va hoat dong nhu the nao trong he thong hoi dap tai lieu?",11.84,0.86,10.99,3.21,2.3,62.7,36.0
+"Ollama Local (4-bit)","Su khac biet giua mo hinh ngon ngu lon (LLM) va mo hinh Embedding la gi?",12.6,0.18,9.71,3.21,2.3,58.8,38.0
+"Ollama Local (4-bit)","Ollama dong vai tro gi trong viec trien khai suy luan AI cuc bo?",13.37,0.58,9.43,3.22,2.3,62.9,41.0
+"Ollama Local (4-bit)","Vector Database la gi va tai sao can dung trong kien truc RAG?",13.37,0.6,9.43,3.23,2.3,68.8,41.0
+"Ollama Local (4-bit)","Cosine Similarity duoc dung de lam gi khi tim kiem tai lieu tuong dong?",13.9,0.59,9.05,3.24,2.3,68.6,39.0
+"Ollama Local (4-bit)","Phan doan van ban (Text Chunking) co y nghia gi doi voi ngu canh cua LLM?",12.66,0.59,9.99,3.25,2.3,58.3,39.0
+"Ollama Local (4-bit)","Giai thich khai niem Time To First Token (TTFT) trong suy luan mo hinh AI.",10.87,0.41,11.55,3.26,2.3,66.7,39.0
+"Ollama Local (4-bit)","Luong tu hoa (Quantization) 4-bit khac 8-bit nhu the nao ve do chinh xac va dung luong?",10.97,0.44,11.45,3.27,2.3,62.5,33.0
+"Ollama Local (4-bit)","ChromaDB luu tru va danh chi muc vector dua tren co che nao?",13.14,0.58,9.59,3.28,2.3,59.8,39.0
+"Ollama Local (4-bit)","Hien tuong Hallucination (ao giac) cua LLM la gi va RAG giam thieu no ra sao?",11.03,0.43,11.37,3.29,2.3,72.3,39.0
+"Ollama Local (4-bit)","Prompt Engineering la gi va cau truc cua mot Prompt chuan gom nhung gi?",12.95,0.56,9.72,3.3,2.3,61.1,39.0
+"Ollama Local (4-bit)","Tai sao cac doanh nghiep lai uu tien chay On-premise LLM thay vi goi Cloud API?",12.55,0.43,9.95,3.3,2.3,65.4,39.0
+"Ollama Local (4-bit)","Virtual Environment (venv) trong Python co tac dung gi khi phat trien ung dung?",13.16,0.64,9.63,3.31,2.3,70.8,40.0
+"Ollama Local (4-bit)","Mo hinh nomic-embed-text co so chieu vector la bao nhieu va dung de lam gi?",13.22,0.61,9.55,3.32,2.3,77.1,40.0
+"Ollama Local (4-bit)","VRAM cua GPU dong vai tro gi khi nap mo hinh ngon ngu lon vao bo nho?",12.72,0.6,9.94,3.33,2.3,67.2,35.0
+"Ollama Local (4-bit)","Giai thich su khac biet giua Llama (mo hinh) va Ollama (runtime).",12.82,0.6,9.86,3.34,2.3,60.4,40.0
+"Ollama Local (4-bit)","Khai niem Context Window (cua so ngu canh) la gi trong LLM?",12.77,0.54,9.86,3.35,2.3,66.7,40.0
+"Ollama Local (4-bit)","The nao la Temperature trong cau hinh sinh van ban cua mo hinh ngon ngu?",12.8,0.55,9.84,3.36,2.3,55.9,38.0
+"Ollama Local (4-bit)","Top-k va Top-p sampling anh huong nhu the nao den tinh da dang cua cau tra loi?",12.67,0.59,9.97,3.37,2.3,73.5,39.0
+"Ollama Local (4-bit)","Trinh bay tom tat quy trinh xu ly file PDF tu khi tai len den khi dua vao Vector Store.",12.56,0.58,10.06,3.38,2.3,58.3,39.0
