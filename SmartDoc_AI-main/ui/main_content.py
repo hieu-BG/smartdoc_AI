@@ -8,7 +8,7 @@ from db.session import init_session
 from ui.ai_service import run_ai_pipeline
 import json
 
-MAX_FILE_SIZE = 10 * 1024 * 1024
+MAX_FILE_SIZE = 50 * 1024 * 1024
 
 def render_main():
     init_session()
@@ -32,7 +32,7 @@ def render_main():
         if uploaded_file.type != "application/pdf" and uploaded_file.type != "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             st.error("Only PDF and DOCX files are supported.")
         if uploaded_file.size > MAX_FILE_SIZE:
-            st.error("File quá lớn! Vui lòng tải file nhỏ hơn 10MB.")
+            st.error("File quá lớn! Vui lòng tải file nhỏ hơn 50MB.")
         else:
             st.success("File hợp lệ!")
         
