@@ -2,7 +2,6 @@ import streamlit as st
 import time  # 1. Thêm thư viện đo thời gian
 from ui.theme import load_main_style
 from rag.rag import ask_pdf
-from rag.graph_rag.graphrag import ask_pdf as ask_pdf_graph
 from db.db import save_message, get_qa_history, get_message_count, update_conversation_title
 from db.session import init_session
 from ui.ai_service import run_ai_pipeline
@@ -45,7 +44,7 @@ def render_main():
 
     mode = st.radio(
         "",
-        ["RAG", "GraphRAG", "CoRAG", "SelfRAG"],
+        ["RAG", "SelfRAG"],
         horizontal=True
     )   
     
