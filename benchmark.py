@@ -261,6 +261,13 @@ def run_benchmark(gemini_key=None, max_q=20):
                     res = call_gemini_api(q_text, gemini_key, CLOUD_MODEL_NAME, context_text=gt)
                     time.sleep(1.5)  # Tránh lỗi Rate limit 429 của Google
 
+                # Ghi rõ phương pháp đếm token (yêu cầu 5: không so 2 cách đo mà không chú thích)
+                if m_type == "local_q4":
+                    token_method = "Exact (streaming chunk count, 1 chunk = 1 token)"
+                else:
+                    words = len(res["full_response"].split())
+                    token_method = f"Estimated (words={words} × 1.3 ≈ {res['tokens_generated']} tokens)"
+
                 raw_runs.append({
                     "Question_ID": q_id,
                     "Question": q_text,
@@ -270,13 +277,18 @@ def run_benchmark(gemini_key=None, max_q=20):
                     "TTFT_seconds": res["ttft"],
                     "Tokens_Per_Sec": res["speed"],
                     "Number_Tokens": res["tokens_generated"],
+                    "Token_Count_Method": token_method,
                     "Time_Point": res["time_point"],
                     "GPU": target_gpu,
                     "Quantization": target_quant,
                     "num_ctx": NUM_CTX
                 })
                 run_results.append(res)
-                print(f"      Run {run_idx}: TTFT={res['ttft']}s | Speed={res['speed']} tok/s | Tokens={res['tokens_generated']}")
+
+                # Log ví dụ tính toán cụ thể (yêu cầu 5: đưa một log làm ví dụ tính toán)
+                print(f"      Run {run_idx}: TTFT = t_first - t_send = {res['ttft']}s | "
+                      f"Speed = {res['tokens_generated']} tokens / {res['total_duration']}s = {res['speed']} tok/s | "
+                      f"Token method: {token_method[:60]}")
 
             avg_ttft = round(sum(r["ttft"] for r in run_results) / len(run_results), 3)
             avg_speed = round(sum(r["speed"] for r in run_results) / len(run_results), 2)
@@ -308,7 +320,7 @@ def run_benchmark(gemini_key=None, max_q=20):
 
     fieldnames_raw = [
         "Question_ID", "Question", "Model", "Run", "Response",
-        "TTFT_seconds", "Tokens_Per_Sec", "Number_Tokens", "Time_Point",
+        "TTFT_seconds", "Tokens_Per_Sec", "Number_Tokens", "Token_Count_Method", "Time_Point",
         "GPU", "Quantization", "num_ctx"
     ]
     with open(OUTPUT_RAW_CSV, "w", newline="", encoding="utf-8-sig") as f:
