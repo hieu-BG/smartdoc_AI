@@ -1,0 +1,7 @@
+**/__pycache__/
+*.pyc
+.env
+chat.db
+venv/
+temp_*.pdf
+temp_*.docx
