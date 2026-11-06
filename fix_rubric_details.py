@@ -1,10 +1,12 @@
+import os
 import csv
 import json
 import re
 
-# File nguồn và đích
-INPUT_CSV = r"D:\SmartDoc_AI-main\benchmark_40_summary_rubric.csv"
-OUTPUT_CSV = r"D:\SmartDoc_AI-main\benchmark_40_summary_rubric.csv"
+# File nguồn và đích tự động xác định theo thư mục hiện tại
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INPUT_CSV = os.path.join(BASE_DIR, "benchmark_40_summary_rubric.csv")
+OUTPUT_CSV = os.path.join(BASE_DIR, "benchmark_40_summary_rubric.csv")
 
 # Bảng đánh giá chi tiết, thực tế cho từng thuật ngữ (chấm thủ công theo ngữ nghĩa thực nghiệm)
 # Cấu trúc: { term: { "gemini": (acc, comp, clar, comment), "qwen": (acc, comp, clar, comment) } }

@@ -6,22 +6,31 @@ import csv
 import re
 import urllib.request
 import urllib.error
+from dotenv import load_dotenv
+
+# Tải cấu hình bảo mật từ file .env
+load_dotenv()
 
 HARDWARE_GPU = "NVIDIA GeForce RTX 2050 Laptop GPU (4 GB VRAM)"
 SYSTEM_RAM = "16 GB RAM (15.7 GB usable)"
 CPU_MODEL = "Intel Core i5-11400H @ 2.70GHz"
 LOCAL_QUANTIZATION = "Q4_K_M"
 LOCAL_MODEL_NAME = "qwen2.5-coder:7b"
+LOCAL_Q8_QUANTIZATION = "Q8_0"
+LOCAL_Q8_MODEL_NAME = "qwen2.5-coder:7b-instruct-q8_0"
 NUM_CTX = 8192
 NUM_RUNS = 3  # Lặp lại 3 lần mỗi câu
 
-# DÁN GOOGLE GEMINI API KEY CỦA BẠN VÀO GIỮA 2 DẤU NGOẶC KÉP DƯỚI ĐÂY:
-GEMINI_API_KEY = "AQ.Ab8RN6KHnComgxBupJAHfiZD7S7CqcgvJiTBLuAKCgrjBZnjiw"
+# Đọc tự động GEMINI_API_KEY từ file .env (không lưu trực tiếp key trong code)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 CLOUD_MODEL_NAME = "gemini-flash-lite-latest"
 
-QUESTIONS_FILE = r"D:\SmartDoc_AI-main\benchmark_20_questions.json"
-OUTPUT_RAW_CSV = r"D:\SmartDoc_AI-main\benchmark_raw_runs.csv"
-OUTPUT_40_CSV = r"D:\SmartDoc_AI-main\benchmark_40_summary_rubric.csv"
+# Tự động xác định thư mục gốc dự án (chạy đúng trên mọi máy tính và hệ điều hành khi clone về)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+QUESTIONS_FILE = os.path.join(BASE_DIR, "benchmark_20_questions.json")
+OUTPUT_RAW_CSV = os.path.join(BASE_DIR, "benchmark_raw_runs.csv")
+OUTPUT_40_CSV = os.path.join(BASE_DIR, "benchmark_40_summary_rubric.csv")
 
 def call_ollama_streaming(prompt, model_name=LOCAL_MODEL_NAME, context_text=""):
     full_prompt = prompt
@@ -212,7 +221,8 @@ def run_benchmark(gemini_key=None, max_q=20):
     print("=" * 90)
     print("   HỆ THỐNG BENCHMARK THỰC NGHIỆM CHUẨN HÓA SMARTDOC AI (TUẦN 8)")
     print(f"   * Phần cứng: {HARDWARE_GPU} | {SYSTEM_RAM}")
-    print(f"   * Model Local: {LOCAL_MODEL_NAME} ({LOCAL_QUANTIZATION}) | Context: {NUM_CTX}")
+    print(f"   * Model Local 4-bit: {LOCAL_MODEL_NAME} ({LOCAL_QUANTIZATION}) | Context: {NUM_CTX}")
+    print(f"   * Model Local 8-bit: {LOCAL_Q8_MODEL_NAME} ({LOCAL_Q8_QUANTIZATION}) | Context: {NUM_CTX}")
     print("=" * 90)
 
     if not os.path.exists(QUESTIONS_FILE):
@@ -224,27 +234,43 @@ def run_benchmark(gemini_key=None, max_q=20):
     questions = questions[:max_q]
     print(f"[*] Đã tải {len(questions)} câu hỏi dựa trên tài liệu NISTIR 7298.\n")
 
-    # WARM-UP (KHỞI ĐỘNG 1 LẦN TRƯỚC KHI ĐO)
-    print("[*] [WARM-UP] Đang khởi động mô hình Local để nạp bộ nhớ (tránh tính thời gian nạp model)...")
-    t_w0 = time.perf_counter()
-    _ = call_ollama_streaming("Warmup test", LOCAL_MODEL_NAME, "Short context for warmup.")
-    print(f"[OK] Khởi động xong ({round(time.perf_counter() - t_w0, 2)}s). Bắt đầu phiên đo đạc thực tế.\n")
-
     raw_runs = []
     summary_40 = []
 
-    # Gemini chạy TRƯỚC, Local Q4 chạy SAU
+    # Thứ tự chạy: Gemini (nếu có key trong .env) -> Local 4-bit -> Local 8-bit
     models_to_test = []
     if gemini_key:
         models_to_test.append("gemini_flash")
+    else:
+        print("[*] Không tìm thấy GEMINI_API_KEY trong file .env -> Bỏ qua Gemini và chuyển sang Local.\n")
     models_to_test.append("local_q4")
+    models_to_test.append("local_q8")
 
     for m_type in models_to_test:
-        display_name = f"Ollama Local ({LOCAL_MODEL_NAME} - {LOCAL_QUANTIZATION})" if m_type == "local_q4" else f"Google Gemini ({CLOUD_MODEL_NAME})"
-        target_quant = LOCAL_QUANTIZATION if m_type == "local_q4" else "None (Cloud API)"
-        target_gpu = HARDWARE_GPU if m_type == "local_q4" else "Cloud Server"
+        if m_type == "local_q4":
+            display_name = f"Ollama Local ({LOCAL_MODEL_NAME} - {LOCAL_QUANTIZATION})"
+            target_quant = LOCAL_QUANTIZATION
+            target_gpu = HARDWARE_GPU
+            target_model = LOCAL_MODEL_NAME
+        elif m_type == "local_q8":
+            display_name = f"Ollama Local ({LOCAL_Q8_MODEL_NAME} - {LOCAL_Q8_QUANTIZATION})"
+            target_quant = LOCAL_Q8_QUANTIZATION
+            target_gpu = f"{HARDWARE_GPU} (VRAM + Shared System RAM)"
+            target_model = LOCAL_Q8_MODEL_NAME
+        else:
+            display_name = f"Google Gemini ({CLOUD_MODEL_NAME})"
+            target_quant = "None (Cloud API)"
+            target_gpu = "Cloud Server"
+            target_model = CLOUD_MODEL_NAME
 
         print(f"\n>>> ĐANG BENCHMARK MÔ HÌNH: {display_name}")
+
+        # WARM-UP RIÊNG CHO TỪNG MODEL LOCAL TRƯỚC KHI ĐO (TRÁNH TÍNH THỜI GIAN NẠP MODEL)
+        if m_type in ["local_q4", "local_q8"]:
+            print(f"[*] [WARM-UP] Đang nạp mô hình {target_model} vào bộ nhớ...")
+            t_w0 = time.perf_counter()
+            _ = call_ollama_streaming("Warmup test", target_model, "Short context for warmup.")
+            print(f"[OK] Nạp xong ({round(time.perf_counter() - t_w0, 2)}s). Bắt đầu phiên đo đạc thực tế.\n")
 
         for item in questions:
             q_id = item["id"]
@@ -255,14 +281,14 @@ def run_benchmark(gemini_key=None, max_q=20):
 
             run_results = []
             for run_idx in range(1, NUM_RUNS + 1):
-                if m_type == "local_q4":
-                    res = call_ollama_streaming(q_text, LOCAL_MODEL_NAME, context_text=gt)
+                if m_type in ["local_q4", "local_q8"]:
+                    res = call_ollama_streaming(q_text, target_model, context_text=gt)
                 else:
                     res = call_gemini_api(q_text, gemini_key, CLOUD_MODEL_NAME, context_text=gt)
                     time.sleep(1.5)  # Tránh lỗi Rate limit 429 của Google
 
                 # Ghi rõ phương pháp đếm token (yêu cầu 5: không so 2 cách đo mà không chú thích)
-                if m_type == "local_q4":
+                if m_type in ["local_q4", "local_q8"]:
                     token_method = "Exact (streaming chunk count, 1 chunk = 1 token)"
                 else:
                     words = len(res["full_response"].split())
@@ -334,7 +360,7 @@ def run_benchmark(gemini_key=None, max_q=20):
         writer = csv.DictWriter(f, fieldnames=fieldnames_summary)
         writer.writeheader()
         writer.writerows(summary_40)
-    print(f"[OK] Đã xuất bảng tổng hợp 40 dòng chuẩn chỉnh: {OUTPUT_40_CSV}")
+    print(f"[OK] Đã xuất bảng tổng hợp ({len(summary_40)} dòng) chuẩn chỉnh: {OUTPUT_40_CSV}")
 
 if __name__ == "__main__":
     gemini_key = sys.argv[1] if len(sys.argv) > 1 else GEMINI_API_KEY
