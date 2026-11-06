@@ -15,4 +15,5 @@ def get_groq_model():
         groq_api_key=api_key,
         model="openai/gpt-oss-120b",
         temperature=0,
+        max_tokens=4096,
     )

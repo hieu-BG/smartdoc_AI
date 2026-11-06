@@ -88,7 +88,7 @@ streamlit run app.py
 ## 📌 Ghi chú
 
 * Đảm bảo Ollama đang chạy trước khi khởi động ứng dụng
-* Các chế độ GraphRAG, CoRAG và SelfRAG cần biến môi trường `GROQ_API_KEY`; chế độ RAG dùng model Ollama cục bộ
+*  chế độ SelfRAG cần biến môi trường `GROQ_API_KEY`; chế độ RAG dùng model Ollama cục bộ
 * Khi thay đổi chunk hoặc tham số, nên rebuild lại vector database để đảm bảo kết quả chính xác
 
 ---

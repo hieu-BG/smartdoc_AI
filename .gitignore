@@ -1,0 +1,21 @@
+# Environment variables (Bảo mật API Keys)
+.env
+*.env
+!.env.example
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+
+# Temporary / Scratch files
+temp_*.pdf
+*.tmp
+
+# VS Code / IDE settings
+.vscode/
+.idea/

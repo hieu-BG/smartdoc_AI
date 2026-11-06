@@ -1,4 +1,4 @@
-﻿import os
+import os
 from dotenv import load_dotenv
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -8,7 +8,7 @@ from langchain_ollama import OllamaLLM
 load_dotenv()
 
 print("[1/4] Dang khoi tao mo hinh Qwen2.5-Coder qua Ollama va HuggingFace Embedding...")
-llm = OllamaLLM(model=os.getenv("LLM_MODEL", "qwen2.5-coder:7b"), base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"))
+llm = OllamaLLM(model=os.getenv("LLM_MODEL", "qwen2.5-coder:7b"), base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), num_ctx=4096)
 embeddings = HuggingFaceEmbeddings(model_name=os.getenv("EMBEDDING_MODEL", "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"))
 
 print("[2/4] Nap du lieu ngu lieu mau...")
