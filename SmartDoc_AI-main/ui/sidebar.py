@@ -103,6 +103,8 @@ def render_sidebar(stats):
             st.session_state.top_p = 0.9
         if "repeat_penalty" not in st.session_state:
             st.session_state.repeat_penalty = 1.1
+        if "num_ctx" not in st.session_state:
+            st.session_state.num_ctx = 4096
 
         st.markdown(
             f"""
@@ -124,6 +126,9 @@ def render_sidebar(stats):
 
         st.markdown("**Repeat Penalty**")
         st.session_state.repeat_penalty = st.slider("", 0.5, 2.0, st.session_state.repeat_penalty, 0.1)
+
+        st.markdown("**Context Window (num_ctx)**")
+        st.session_state.num_ctx = st.select_slider("", options=[1024, 2048, 4096, 8192], value=st.session_state.num_ctx, key="slider_num_ctx")
 
         st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
 

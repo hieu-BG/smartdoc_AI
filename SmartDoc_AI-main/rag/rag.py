@@ -93,13 +93,15 @@ def ask_pdf(file_path, question, progress=None):
 
     prompt = build_prompt(context, question)
 
+    num_ctx_val = getattr(st.session_state, "num_ctx", 4096)
     llm = OllamaLLM(
-    model="qwen2.5-coder:7b",
-    temperature=st.session_state.temperature,
-    top_p=st.session_state.top_p,
-    repeat_penalty=st.session_state.repeat_penalty
+        model="qwen2.5-coder:7b",
+        temperature=st.session_state.temperature,
+        top_p=st.session_state.top_p,
+        repeat_penalty=st.session_state.repeat_penalty,
+        num_ctx=num_ctx_val
     )
-    print("param LLM:", st.session_state.temperature, st.session_state.top_p, st.session_state.repeat_penalty)
+    print("param LLM:", st.session_state.temperature, st.session_state.top_p, st.session_state.repeat_penalty, "num_ctx:", num_ctx_val)
     response = llm.invoke(prompt)
 
     if progress:
