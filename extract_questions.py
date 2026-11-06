@@ -1,8 +1,16 @@
+import os
 import pypdf
 import re
 import json
 
-pdf_path = r"C:\Users\THANH HIEU\Downloads\GOVPUB-C13-924f0735cdd11d22b91b8d53720eb73b.pdf"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Đường dẫn tài liệu chuẩn NISTIR 7298 nằm gọn trong thư mục dự án
+pdf_path = os.path.join(BASE_DIR, "data", "NISTIR_7298.pdf")
+if not os.path.exists(pdf_path):
+    raise FileNotFoundError(f"Không tìm thấy file NISTIR 7298 PDF tại: {pdf_path}")
+
+print(f"Đang đọc tài liệu chuẩn từ: {pdf_path}")
 reader = pypdf.PdfReader(pdf_path)
 
 candidates = [
@@ -34,7 +42,7 @@ print(f"Total QA pairs extracted: {len(qa_list)}")
 for q in qa_list:
     print(f"#{q['id']} [Page {q['page']}] {q['term']}: {q['ground_truth'][:70]}...")
 
-output_path = r"D:\SmartDoc_AI-main\benchmark_20_questions.json"
+output_path = os.path.join(BASE_DIR, "benchmark_20_questions.json")
 with open(output_path, "w", encoding="utf-8") as f:
     json.dump(qa_list, f, ensure_ascii=False, indent=2)
 
